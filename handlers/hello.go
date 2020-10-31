@@ -7,10 +7,12 @@ import (
 	"net/http"
 )
 
+// Hello handlers will return an error for domain which is under development
 type Hello struct {
 	l *log.Logger
 }
 
+// NewHello returns a Hello object as dependency injection (?)
 func NewHello(l *log.Logger) *Hello {
 	return &Hello{l}
 }

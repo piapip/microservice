@@ -6,10 +6,12 @@ import (
 	"net/http"
 )
 
+// Goodbye handlers will return an error for domain which is under development
 type Goodbye struct {
 	l *log.Logger
 }
 
+// NewGoodbye returns a Goodbye object as dependency injection (?)
 func NewGoodbye(l *log.Logger) *Goodbye {
 	return &Goodbye{l}
 }
