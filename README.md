@@ -1,3 +1,8 @@
+Lesson 2: Introduction 2.
+
+Refactor code to regroup handlers. Using ServeMux to use customized handler instead of defaultHandle in the ListenAndServe.
+Learn how to config basic stat of a server like Address, handler, IdleTimeout,... and gracefully shutdown.
+
 Lesson 1: Introduction.
 
 Learn how to initiate a simple server that can send information. 
