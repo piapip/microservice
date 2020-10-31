@@ -13,12 +13,16 @@ import (
 
 func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
-	helloHandler := handlers.NewHello(logger)
-	goodbyeHandler := handlers.NewGoodbye(logger)
-
 	serveMux := http.NewServeMux()
-	serveMux.Handle("/", helloHandler)
+
+	helloHandler := handlers.NewHello(logger)
+	serveMux.Handle("/hello", helloHandler)
+
+	goodbyeHandler := handlers.NewGoodbye(logger)
 	serveMux.Handle("/goodbye", goodbyeHandler)
+
+	productsHandler := handlers.NewProducts(logger)
+	serveMux.Handle("/", productsHandler)
 
 	// SERVER CONFIGURATION
 	// Customized server:
@@ -26,8 +30,8 @@ func main() {
 		Addr:         ":9090",
 		Handler:      serveMux,
 		IdleTimeout:  120 * time.Second,
-		ReadTimeout:  1 * time.Second,
-		WriteTimeout: 1 * time.Second,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
 	}
 
 	go func() {
@@ -40,6 +44,7 @@ func main() {
 		err := server.ListenAndServe()
 		if err != nil {
 			logger.Fatal(err)
+			os.Exit(1)
 		}
 	}()
 
