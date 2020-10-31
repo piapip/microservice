@@ -7,13 +7,17 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/piapip/microservice/handlers"
 	"golang.org/x/net/context"
 )
 
 func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
-	serveMux := http.NewServeMux()
+	serveMux := mux.NewRouter()
+	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
+	postRouter := serveMux.Methods(http.MethodPost).Subrouter()
+	putRouter := serveMux.Methods(http.MethodPut).Subrouter()
 
 	helloHandler := handlers.NewHello(logger)
 	serveMux.Handle("/hello", helloHandler)
@@ -22,7 +26,15 @@ func main() {
 	serveMux.Handle("/goodbye", goodbyeHandler)
 
 	productsHandler := handlers.NewProducts(logger)
-	serveMux.Handle("/", productsHandler)
+	getRouter.HandleFunc("/products", productsHandler.GetProducts)
+
+	postRouter.HandleFunc("/products", productsHandler.AddProduct)
+	postRouter.Use(productsHandler.MiddlewareProductValidation)
+
+	putRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.UpdateProduct)
+	putRouter.Use(productsHandler.MiddlewareProductValidation)
+
+	// serveMux.Handle("/products", productsHandler)
 
 	// SERVER CONFIGURATION
 	// Customized server:
