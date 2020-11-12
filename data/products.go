@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"regexp"
 	"time"
+
+	"github.com/go-playground/validator"
 )
 
 // ErrorProductNotFound is returned when you can't find any wanted product.
@@ -20,6 +23,25 @@ type Product struct {
 	CreatedOn   string  `json:"-"`
 	UpdatedOn   string  `json:"-"`
 	DeletedOn   string  `json:"-"`
+}
+
+//Validate check if the product information is good enough
+func (p *Product) Validate() error {
+	validate := validator.New()
+	// tag name and the validation function
+	validate.RegisterValidation("sku", validateSKU)
+	return validate.Struct(p)
+}
+
+func validateSKU(fl validator.FieldLevel) bool {
+	re := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]+`)
+	matches := re.FindAllString(fl.Field().String(), -1)
+
+	if len(matches) != 1 {
+		return false
+	}
+
+	return true
 }
 
 // Products is a list of available products

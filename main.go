@@ -14,17 +14,23 @@ import (
 
 func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
+
+	// create a new serve mux and register the handlers
 	serveMux := mux.NewRouter()
+
 	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
 	postRouter := serveMux.Methods(http.MethodPost).Subrouter()
 	putRouter := serveMux.Methods(http.MethodPut).Subrouter()
 
+	// create the handlers for Hello
 	helloHandler := handlers.NewHello(logger)
 	serveMux.Handle("/hello", helloHandler)
 
+	// create the handlers for Goodbye
 	goodbyeHandler := handlers.NewGoodbye(logger)
 	serveMux.Handle("/goodbye", goodbyeHandler)
 
+	// create the handlers for Products
 	productsHandler := handlers.NewProducts(logger)
 	getRouter.HandleFunc("/products", productsHandler.GetProducts)
 
@@ -41,9 +47,9 @@ func main() {
 	server := &http.Server{
 		Addr:         ":9090",
 		Handler:      serveMux,
-		IdleTimeout:  120 * time.Second,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  120 * time.Second,
 	}
 
 	go func() {
