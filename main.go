@@ -21,6 +21,7 @@ func main() {
 	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
 	postRouter := serveMux.Methods(http.MethodPost).Subrouter()
 	putRouter := serveMux.Methods(http.MethodPut).Subrouter()
+	deleteRouter := serveMux.Methods(http.MethodDelete).Subrouter()
 
 	// create the handlers for Hello
 	helloHandler := handlers.NewHello(logger)
@@ -40,6 +41,7 @@ func main() {
 	putRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.UpdateProduct)
 	putRouter.Use(productsHandler.MiddlewareProductValidation)
 
+	deleteRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.DeleteProduct)
 	// serveMux.Handle("/products", productsHandler)
 
 	// SERVER CONFIGURATION

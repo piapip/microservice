@@ -65,6 +65,28 @@ func (p *Products) UpdateProduct(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// DeleteProduct deletes selected product based on id
+func (p *Products) DeleteProduct(res http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(res, "Unable to convert id", http.StatusBadRequest)
+	}
+
+	p.l.Println("Handle DELETE product ", id)
+
+	err = data.DeleteProduct(id)
+	if err == data.ErrorProductNotFound {
+		http.Error(res, "Product not found", http.StatusNotFound)
+		return
+	}
+
+	if err != nil {
+		http.Error(res, "Product not found", http.StatusInternalServerError)
+		return
+	}
+}
+
 // KeyProduct is a key type for Product in context
 type KeyProduct struct{}
 

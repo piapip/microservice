@@ -85,6 +85,18 @@ func UpdateProduct(id int, p *Product) error {
 	return nil
 }
 
+// DeleteProduct will delete the product with respective id in the list.
+func DeleteProduct(id int) error {
+	i := findIndexByProductID(id)
+	if i == -1 {
+		return ErrorProductNotFound
+	}
+
+	// productsList = append(productsList[:i], productsList[i+1]...)
+	productsList = append(productsList[i:], productsList[:i+1]...)
+	return nil
+}
+
 func getNextID() int {
 	lastProduct := productsList[len(productsList)-1]
 	return lastProduct.ID + 1
@@ -98,6 +110,16 @@ func findProduct(id int) (*Product, int, error) {
 	}
 
 	return nil, -1, ErrorProductNotFound
+}
+
+func findIndexByProductID(id int) int {
+	for index, product := range productsList {
+		if product.ID == id {
+			return index
+		}
+	}
+
+	return -1
 }
 
 // productsList is a list of coffee stuff. Should be deleted and should never be initiated this way.
