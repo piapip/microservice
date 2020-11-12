@@ -1,3 +1,10 @@
+Lesson 6: JSON Validation
+
+Using Validator package to create some validators for our model Products and implement the validator to the middleware.
+Validator needs to have both built-in validation requirements (such as name, email,...) and customized requirements (in this lesson is SKU)
+
+=========================================================================================
+
 Lesson 5: Gorilla
 
 Gorilla stores variable of the URL in mux.Vars(*http.Request)

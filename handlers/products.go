@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -77,7 +78,16 @@ func (p Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 		// extracting data from req to JSON
 		err := newProduct.FromJSON(req.Body)
 		if err != nil {
+			p.l.Println("[ERROR] deserializing products", err)
 			http.Error(res, "Something's wrong with the server. Unable to convert from JSON to Product struct", http.StatusBadRequest)
+			return
+		}
+
+		// validate the product
+		err = newProduct.Validate()
+		if err != nil {
+			p.l.Println("[ERROR] false product", err)
+			http.Error(res, fmt.Sprintf("Error validating product: %s", err), http.StatusBadRequest)
 			return
 		}
 
