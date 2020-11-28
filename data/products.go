@@ -1,13 +1,8 @@
 package data
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"regexp"
 	"time"
-
-	"github.com/go-playground/validator"
 )
 
 // ErrorProductNotFound is returned when you can't find any wanted product.
@@ -25,67 +20,45 @@ type Product struct {
 	DeletedOn   string  `json:"-"`
 }
 
-//Validate check if the product information is good enough
-func (p *Product) Validate() error {
-	validate := validator.New()
-	// tag name and the validation function
-	validate.RegisterValidation("sku", validateSKU)
-	return validate.Struct(p)
-}
-
-func validateSKU(fl validator.FieldLevel) bool {
-	re := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]+`)
-	matches := re.FindAllString(fl.Field().String(), -1)
-
-	if len(matches) != 1 {
-		return false
-	}
-
-	return true
-}
-
 // Products is a list of available products
 type Products []*Product
-
-// ToJSON will convert list of product to JSON format
-func (p *Products) ToJSON(w io.Writer) error {
-	encoder := json.NewEncoder(w)
-	// All kind of funny shenanigan before encoding will go here. Like I'll only encode those goods that have a SKU.
-	// Doing something with p here.
-	return encoder.Encode(p)
-}
-
-// FromJSON converts items in JSON format from the stream to Product struct
-func (p *Product) FromJSON(r io.Reader) error {
-	decoder := json.NewDecoder(r)
-	// This one is quite confusing tbh.
-	return decoder.Decode(p)
-}
 
 // GetProducts returns the products from the data store
 func GetProducts() Products {
 	return productsList
 }
 
+// GetProductByID returns a product which matches the id from the list.
+// Returns ErrorProductNotFound if there's no matching result.
+func GetProductByID(id int) (*Product, error) {
+	index := findIndexByProductID(id)
+	if id == -1 {
+		return nil, ErrorProductNotFound
+	}
+
+	return productsList[index], nil
+}
+
 // AddProduct will add a product to the list.
-func AddProduct(p *Product) {
+func AddProduct(p Product) {
 	p.ID = getNextID()
-	productsList = append(productsList, p)
+	productsList = append(productsList, &p)
 }
 
 // UpdateProduct will update the selected product in the list.
-func UpdateProduct(id int, p *Product) error {
-	_, index, err := findProduct(id)
-	if err != nil {
-		return err
+// Returns ErrorProductNotFound if there's no matching result.
+func UpdateProduct(p Product) error {
+	index := findIndexByProductID(p.ID)
+	if index == -1 {
+		return ErrorProductNotFound
 	}
 
-	p.ID = id
-	productsList[index] = p
+	productsList[index] = &p
 	return nil
 }
 
 // DeleteProduct will delete the product with respective id in the list.
+// Returns ErrorProductNotFound if there's no matching result.
 func DeleteProduct(id int) error {
 	i := findIndexByProductID(id)
 	if i == -1 {
@@ -102,15 +75,17 @@ func getNextID() int {
 	return lastProduct.ID + 1
 }
 
-func findProduct(id int) (*Product, int, error) {
-	for index, p := range productsList {
-		if p.ID == id {
-			return p, index, nil
-		}
-	}
+// // findIndex finds the index of a product in the database
+// // returns -1 when no product can be found
+// func findProduct(id int) (*Product, int, error) {
+// 	for index, p := range productsList {
+// 		if p.ID == id {
+// 			return p, index, nil
+// 		}
+// 	}
 
-	return nil, -1, ErrorProductNotFound
-}
+// 	return nil, -1, ErrorProductNotFound
+// }
 
 func findIndexByProductID(id int) int {
 	for index, product := range productsList {

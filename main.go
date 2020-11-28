@@ -8,20 +8,21 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/piapip/microservice/data"
 	"github.com/piapip/microservice/handlers"
 	"golang.org/x/net/context"
 )
 
 func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
+	validator := data.NewValidation()
 
 	// create a new serve mux and register the handlers
 	serveMux := mux.NewRouter()
 
-	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
-	postRouter := serveMux.Methods(http.MethodPost).Subrouter()
-	putRouter := serveMux.Methods(http.MethodPut).Subrouter()
-	deleteRouter := serveMux.Methods(http.MethodDelete).Subrouter()
+	// postRouter := serveMux.Methods(http.MethodPost).Subrouter()
+	// putRouter := serveMux.Methods(http.MethodPut).Subrouter()
+	// deleteRouter := serveMux.Methods(http.MethodDelete).Subrouter()
 
 	// create the handlers for Hello
 	helloHandler := handlers.NewHello(logger)
@@ -32,16 +33,19 @@ func main() {
 	serveMux.Handle("/goodbye", goodbyeHandler)
 
 	// create the handlers for Products
-	productsHandler := handlers.NewProducts(logger)
-	getRouter.HandleFunc("/products", productsHandler.GetProducts)
+	productsHandler := handlers.NewProducts(logger, validator)
 
-	postRouter.HandleFunc("/products", productsHandler.AddProduct)
-	postRouter.Use(productsHandler.MiddlewareProductValidation)
+	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
+	// getRouter.HandleFunc("/products", productsHandler.)
+	// getRouter.HandleFunc("/products/{id:[0-9]+}", productHand)
 
-	putRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.UpdateProduct)
-	putRouter.Use(productsHandler.MiddlewareProductValidation)
+	// postRouter.HandleFunc("/products", productsHandler.AddProduct)
+	// postRouter.Use(productsHandler.MiddlewareProductValidation)
 
-	deleteRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.DeleteProduct)
+	// putRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.UpdateProduct)
+	// putRouter.Use(productsHandler.MiddlewareProductValidation)
+
+	// deleteRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.DeleteProduct)
 	// serveMux.Handle("/products", productsHandler)
 
 	// SERVER CONFIGURATION
