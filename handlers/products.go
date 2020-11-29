@@ -72,8 +72,8 @@ package handlers
 // // MiddlewareProductValidation will extract the product struct, fill the empty struct with data then put it into req's Context() with Value of sampleProd and key of KeyProduct{}
 // func (p Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 // 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-// 		// if you notice, we assign sampleProd := &models.Product{} with & because we will use it straight up in the function above
-// 		// models.AddProduct(&sampleProd) used to be models.AddProduct(sampleProd) without the "&"
+// 		// if you notice, we assign newProduct := &models.Product{} with & because we will use it straight up in the function above
+// 		// models.AddProduct(&newProduct) used to be models.AddProduct(sampleProd) without the "&"
 // 		newProduct := data.Product{}
 
 // 		// extracting data from req to JSON

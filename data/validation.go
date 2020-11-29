@@ -67,21 +67,25 @@ func NewValidation() *Validation {
 func (v *Validation) Validate(i interface{}) ValidationErrors {
 	// .Struct(i) validates a structs exposed fields
 	// .(validator.ValidationErrors) will type cast the error returned from .Struct(i) to type ValidationErrors
-	errs := v.validate.Struct(i).(validator.ValidationErrors)
 
-	if len(errs) == 0 {
-		return nil
+	// WARNING!!! YOU CAN'T CAST .(validator.ValidationErrors) this right away.
+	// This error is seen quite often in nodejs, when you can't cast struct to a nil.
+	// You'll have to check for nil first, otherwise it will shoot error. Cost me an hour.
+	// errs := v.validate.Struct(i).(validator.ValidationErrors)
+	errs := v.validate.Struct(i)
+	if errs != nil {
+		var returnErrs ValidationErrors
+		for _, err := range errs.(validator.ValidationErrors) {
+			// cast the FieldError into our ValidationError and append to the slice
+			fmt.Println("Got an err: ", err)
+			validationError := ValidationError{err.(validator.FieldError)}
+			returnErrs = append(returnErrs, validationError)
+		}
+
+		return returnErrs
 	}
 
-	var returnErrs ValidationErrors
-	for _, err := range errs {
-		// cast the FieldError into our ValidationError and append to the slice
-		fmt.Println("Got an err: ", err)
-		validationError := ValidationError{err.(validator.FieldError)}
-		returnErrs = append(returnErrs, validationError)
-	}
-
-	return returnErrs
+	return nil
 }
 
 // validateSKU

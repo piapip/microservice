@@ -2,7 +2,6 @@ package data
 
 import (
 	"fmt"
-	"time"
 )
 
 // ErrorProductNotFound is returned when you can't find any wanted product.
@@ -14,10 +13,7 @@ type Product struct {
 	Name        string  `json:"name" validate:"required"`
 	Description string  `json:"description"`
 	Price       float32 `json:"price" validate:"gt=0"`
-	SKU         string  `json:"sku" validate:"required,sku"` //customized validation sample
-	CreatedOn   string  `json:"-"`
-	UpdatedOn   string  `json:"-"`
-	DeletedOn   string  `json:"-"`
+	SKU         string  `json:"sku" validate:"sku"` //customized validation sample
 }
 
 // Products is a list of available products
@@ -75,18 +71,6 @@ func getNextID() int {
 	return lastProduct.ID + 1
 }
 
-// // findIndex finds the index of a product in the database
-// // returns -1 when no product can be found
-// func findProduct(id int) (*Product, int, error) {
-// 	for index, p := range productsList {
-// 		if p.ID == id {
-// 			return p, index, nil
-// 		}
-// 	}
-
-// 	return nil, -1, ErrorProductNotFound
-// }
-
 func findIndexByProductID(id int) int {
 	for index, product := range productsList {
 		if product.ID == id {
@@ -105,8 +89,6 @@ var productsList = []*Product{
 		Description: "Frothy milky coffee",
 		Price:       2.45,
 		SKU:         "qwe-rty-uio",
-		CreatedOn:   time.Now().UTC().String(),
-		UpdatedOn:   time.Now().UTC().String(),
 	},
 	&Product{
 		ID:          2,
@@ -114,7 +96,5 @@ var productsList = []*Product{
 		Description: "Short and strong coffee without milk",
 		Price:       1.99,
 		SKU:         "asd-ghj-klm",
-		CreatedOn:   time.Now().UTC().String(),
-		UpdatedOn:   time.Now().UTC().String(),
 	},
 }
