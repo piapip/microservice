@@ -21,9 +21,6 @@ func main() {
 	// create a new serve mux and register the handlers
 	serveMux := mux.NewRouter()
 
-	// putRouter := serveMux.Methods(http.MethodPut).Subrouter()
-	// deleteRouter := serveMux.Methods(http.MethodDelete).Subrouter()
-
 	// create the sample handlers
 	helloHandler := sample_handlers.NewHello(logger)
 	serveMux.Handle("/hello", helloHandler)
@@ -41,11 +38,13 @@ func main() {
 	postRouter.HandleFunc("/products", productsHandler.Create)
 	postRouter.Use(productsHandler.MiddlewareProductValidation)
 
-	// putRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.UpdateProduct)
-	// putRouter.Use(productsHandler.MiddlewareProductValidation)
+	// so we change the idea a bit to not using id in the PUT method.
+	putRouter := serveMux.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/products", productsHandler.Update)
+	putRouter.Use(productsHandler.MiddlewareProductValidation)
 
-	// deleteRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.DeleteProduct)
-	// serveMux.Handle("/products", productsHandler)
+	deleteRouter := serveMux.Methods(http.MethodDelete).Subrouter()
+	deleteRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.Delete)
 
 	// SERVER CONFIGURATION
 	// Customized server:
