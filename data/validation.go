@@ -77,7 +77,6 @@ func (v *Validation) Validate(i interface{}) ValidationErrors {
 		var returnErrs ValidationErrors
 		for _, err := range errs.(validator.ValidationErrors) {
 			// cast the FieldError into our ValidationError and append to the slice
-			fmt.Println("Got an err: ", err)
 			validationError := ValidationError{err.(validator.FieldError)}
 			returnErrs = append(returnErrs, validationError)
 		}

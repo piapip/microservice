@@ -12,8 +12,8 @@ type Product struct {
 	ID          int     `json:"id"`
 	Name        string  `json:"name" validate:"required"`
 	Description string  `json:"description"`
-	Price       float32 `json:"price" validate:"gt=0"`
-	SKU         string  `json:"sku" validate:"sku"` //customized validation sample
+	Price       float32 `json:"price" validate:"required,gt=0"`
+	SKU         string  `json:"sku" validate:"required,sku"` //customized validation sample
 }
 
 // Products is a list of available products
