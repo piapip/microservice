@@ -1,11 +1,15 @@
-Lesson 6: JSON Validation
+# Lesson 7: Swagger
+
+Before we start this lesson, we need to fix the repository, got to do some rearrangement.
+
+In this lesson, we will learn how to create a docs for our microservice by using swagger. Even though I say "learn", I can't really do it right away, it might take some time since I can only do it by myself after iterations of practices. Sitting by the documents and start grind through the content. Don't have to remember everything though.
+
+# Lesson 6: JSON Validation
 
 Using Validator package to create some validators for our model Products and implement the validator to the middleware.
 Validator needs to have both built-in validation requirements (such as name, email,...) and customized requirements (in this lesson is SKU)
 
-=========================================================================================
-
-Lesson 5: Gorilla
+# Lesson 5: Gorilla
 
 Gorilla stores variable of the URL in mux.Vars(*http.Request)
 
@@ -13,37 +17,27 @@ Gorilla stores variable of the URL in mux.Vars(*http.Request)
 
 Middleware is like a bunch of validation, checkup, or data conversion.
 
-=========================================================================================
-
-Lesson 4: RESTful 2
+# Lesson 4: RESTful 2
 
 RESTful methods: POST, PUT.
 Not much going on. Just showing off how to do this manually without using any high gear library. DELETE should be the same as PUT.
 
 So with traditional, raw Golang, we can't define placeholder for the URL, like the localhost/products/1 for PUT request, it will immediately shot back to localhost/. We will have to parse the URL ourselves (wasteful codes) and it's really time-consuming. But with Gorilla's mux package, we can use placeholder, regex for those URL.
 
-=========================================================================================
-
-Lesson 3: RESTful
+# Lesson 3: RESTful
 
 RESTful methods: GET.
 Working with data. Just some half-ass created data. Not with proper database yet.
 Using Encoder and working with JSON format.
 
-=========================================================================================
-
-Lesson 2: Introduction 2.
+# Lesson 2: Introduction 2.
 
 Refactor code to regroup handlers. Using ServeMux to use customized handler instead of defaultHandle in the ListenAndServe.
 Learn how to config basic stat of a server like Address, handler, IdleTimeout,... and gracefully shutdown.
 
-=========================================================================================
-
-Lesson 1: Introduction.
+# Lesson 1: Introduction.
 
 Learn how to initiate a simple server that can send information. 
 A very simple GET request. (doesn't specify that's a GET request though)
 Learn what http package can do.
 Remember that http also help you handle errors if there's any.
-
-=========================================================================================
