@@ -2,6 +2,8 @@
 
 Before we start this lesson, we need to fix the repository, got to do some rearrangement.
 
+In this lesson, we will learn how to create a docs for our microservice by using swagger. Even though I say "learn", I can't really do it right away, it might take some time since I can only do it by myself after iterations of practices. Sitting by the documents and start grind through the content. Don't have to remember everything though.
+
 # Lesson 6: JSON Validation
 
 Using Validator package to create some validators for our model Products and implement the validator to the middleware.
