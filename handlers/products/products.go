@@ -10,6 +10,26 @@ import (
 	"github.com/piapip/microservice/data"
 )
 
+// A list of products returns in the response
+// swagger:response productsResponseWrapper
+type productsResponseWrapper struct {
+	// All products in the system
+	// in: body
+	Body []data.Product
+}
+
+// swagger:response noContent
+type productsNoContent struct {
+}
+
+// swagger:parameters deleteProduct
+type productIDParameterWrapper struct {
+	// The id of the product to delete from the database
+	// in: path
+	// required: true
+	ID int `json:"id"`
+}
+
 // KeyProduct is a key used for the Product object in the context
 type KeyProduct struct{}
 

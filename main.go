@@ -1,3 +1,17 @@
+// Package classification of Product API
+//
+// Documentation for Product API
+//
+//  Schemes: http
+//  BasePath: /
+//  Version: 1.0.0
+//
+//  Consumes:
+//  - application/json
+//
+//  Produces:
+//  - application/json
+// swagger:meta
 package main
 
 import (
@@ -7,6 +21,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
 	"github.com/piapip/microservice/data"
 	sample_handlers "github.com/piapip/microservice/handlers"
@@ -18,16 +33,16 @@ func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
 	validator := data.NewValidation()
 
-	// create a new serve mux and register the handlers
+	// Create a new serve mux and register the handlers
 	serveMux := mux.NewRouter()
 
-	// create the sample handlers
+	// Create the sample handlers
 	helloHandler := sample_handlers.NewHello(logger)
 	serveMux.Handle("/hello", helloHandler)
 	goodbyeHandler := sample_handlers.NewGoodbye(logger)
 	serveMux.Handle("/goodbye", goodbyeHandler)
 
-	// create the handlers for Products
+	// Create the handlers for Products
 	productsHandler := handlers.NewProducts(logger, validator)
 
 	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
@@ -38,13 +53,24 @@ func main() {
 	postRouter.HandleFunc("/products", productsHandler.Create)
 	postRouter.Use(productsHandler.MiddlewareProductValidation)
 
-	// so we change the idea a bit to not using id in the PUT method.
+	// So we change the idea a bit to not using id in the PUT method.
 	putRouter := serveMux.Methods(http.MethodPut).Subrouter()
 	putRouter.HandleFunc("/products", productsHandler.Update)
 	putRouter.Use(productsHandler.MiddlewareProductValidation)
 
 	deleteRouter := serveMux.Methods(http.MethodDelete).Subrouter()
 	deleteRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.Delete)
+
+	// For swagger
+	options := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
+	swaggerHandler := middleware.Redoc(options, nil)
+	getRouter.Handle("/docs", swaggerHandler)
+	// This handle will upload file swagger.yaml to our localhost:9090 server.
+	// Redoc is Javascript based, they use React or some sort to code this thing.
+	// So when we define {SpecURL: ...} like above it will attempt to download content from our localhost:9090/swagger.yaml
+	// And to give it source to download, we need to upload our swagger.yaml file to our server.
+	// The code below will do the trick. It will look for the specific swagger.yaml file in our baseDir.
+	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
 	// SERVER CONFIGURATION
 	// Customized server:

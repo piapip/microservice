@@ -6,6 +6,11 @@ import (
 	"github.com/piapip/microservice/data"
 )
 
+// swagger:route DELETE /products/{id} products deleteProduct
+// Return a list of products
+// responses:
+//  201: noContent
+
 // Delete handles DELETE requests and removes items from the database
 func (p *Products) Delete(res http.ResponseWriter, rq *http.Request) {
 	id := getProductID(rq)

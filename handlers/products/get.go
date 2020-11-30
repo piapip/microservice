@@ -6,6 +6,11 @@ import (
 	"github.com/piapip/microservice/data"
 )
 
+// swagger:route GET /products products listProducts
+// Return a list of products
+// responses:
+//  200: productsResponseWrapper
+
 // ListAll handles GET requests and returns all item in the list
 func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
 	p.logger.Println("[DEBUG] get all records")
