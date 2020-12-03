@@ -1,3 +1,9 @@
+# TRY 8: Generate code for client side with swagger 
+
+This command: 
+swagger generate client -f ../microservice/swagger.yaml -A api 
+is bugged. I created a folder ../client and run that command from there. And instead of generating codes in that folder, the command created a new "client" folder in this thing, set up all the code here and leave that newly made ../client alone for some god damn reason who knows. But it's an open-source and who knows what's going on.
+
 # Lesson 7: Swagger
 
 Before we start this lesson, we need to fix the repository, got to do some rearrangement.
