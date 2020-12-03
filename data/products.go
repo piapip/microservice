@@ -14,11 +14,32 @@ type Product struct {
 	//
 	// required: true
 	// min: 1
-	ID          int     `json:"id"`
-	Name        string  `json:"name" validate:"required"`
-	Description string  `json:"description"`
-	Price       float32 `json:"price" validate:"required,gt=0"`
-	SKU         string  `json:"sku" validate:"required,sku"` //customized validation sample
+	ID int `json:"id"`
+
+	//  the name for this product
+	//
+	// required: true
+	// max length: 255
+	Name string `json:"name" validate:"required"`
+
+	// the description for this product
+	//
+	// required: false
+	// max length: 10000
+	Description string `json:"description"`
+
+	// the price for this product
+	//
+	// required: true
+	// min: 0.01
+	Price float32 `json:"price" validate:"required,gt=0"`
+
+	// the SKU for this product
+	//
+	// required: true
+	// pattern: [a-z]+-[a-z]+-[a-z]+
+	// example: abc-def-ghk
+	SKU string `json:"sku" validate:"required,sku"` //customized validation sample
 }
 
 // Products is a list of available products
