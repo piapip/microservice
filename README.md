@@ -1,8 +1,12 @@
 # TRY 8: Generate code for client side with swagger 
 
-This command: 
-swagger generate client -f ../microservice/swagger.yaml -A api 
-is bugged. I created a folder ../client and run that command from there. And instead of generating codes in that folder, the command created a new "client" folder in this thing, set up all the code here and leave that newly made ../client alone for some god damn reason who knows. But it's an open-source and who knows what's going on.
+Command
+swagger generate client -f ./swagger.yaml --target=sdk/ -A api 
+the --target seems to be crucial because without it, it will generate code directly to this microservice folder and it would be messy and noone wants that.
+Without the --target, all the import will be messed up too.
+TLDR: --target is the must.
+It also has some bugs that related to not being able to find the spec file (my swagger.yaml file) so it's better for my head to just do it where the swagger.yaml file is.
+DEBUGGING is important. Learn how to do that.
 
 # Lesson 7: Swagger
 
