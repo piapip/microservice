@@ -7,9 +7,10 @@ import (
 )
 
 // swagger:route GET /products products listProducts
-// Return a list of products
+//
+// Return a list of products from the database
 // responses:
-//  200: productsResponseWrapper
+//  200: productsResponse
 
 // ListAll handles GET requests and returns all item in the list
 func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
@@ -23,6 +24,13 @@ func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
 		p.logger.Println("[ERROR] serializing product", err)
 	}
 }
+
+// swagger:route GET /products/{id} products listSingleProduct
+//
+// Return a product with the respective ID in the database
+// responses:
+//  200: productResponse
+//  404: errorResponse
 
 // ListSingle handles GET requests, return the product with chosen ID.
 func (p *Products) ListSingle(res http.ResponseWriter, rq *http.Request) {

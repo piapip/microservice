@@ -7,9 +7,12 @@ import (
 )
 
 // swagger:route DELETE /products/{id} products deleteProduct
-// Return a list of products
+//
+// Delete a product with the respective ID.
 // responses:
-//  201: noContent
+// 		201: noContentResponse
+// 	404: errorResponse
+//  500: errorResponse
 
 // Delete handles DELETE requests and removes items from the database
 func (p *Products) Delete(res http.ResponseWriter, rq *http.Request) {
