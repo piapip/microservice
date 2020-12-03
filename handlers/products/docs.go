@@ -53,8 +53,9 @@ type productResponseWrapper struct {
 	Body data.Product
 }
 
+// No content is returned by this API endpoint
 // swagger:response noContentResponse
-type productsNoContent struct {
+type noContentResponseWrapper struct {
 }
 
 // swagger:parameters updateProduct createProduct
@@ -66,7 +67,7 @@ type productParamsWrapper struct {
 	Body data.Product
 }
 
-// swagger:parameters deleteProduct
+// swagger:parameters deleteProduct listSingleProduct
 type productIDParameterWrapper struct {
 	// The id of the product for which the operation relates
 	// in: path

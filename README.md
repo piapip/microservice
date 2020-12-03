@@ -1,3 +1,13 @@
+# TRY 8: Generate code for client side with swagger 
+
+Command
+swagger generate client -f ./swagger.yaml --target=sdk/ -A api 
+the --target seems to be crucial because without it, it will generate code directly to this microservice folder and it would be messy and noone wants that.
+Without the --target, all the import will be messed up too.
+TLDR: --target is the must.
+It also has some bugs that related to not being able to find the spec file (my swagger.yaml file) so it's better for my head to just do it where the swagger.yaml file is.
+DEBUGGING is important. Learn how to do that.
+
 # Lesson 7: Swagger
 
 Before we start this lesson, we need to fix the repository, got to do some rearrangement.

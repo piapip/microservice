@@ -140,6 +140,14 @@ paths:
     get:
       description: Return a product with the respective ID in the database
       operationId: listSingleProduct
+      parameters:
+      - description: The id of the product for which the operation relates
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
       responses:
         "200":
           $ref: '#/responses/productResponse'
@@ -158,7 +166,8 @@ responses:
     description: Error returns when it fails the validation test
     schema:
       $ref: '#/definitions/ValidationError'
-  noContentResponse: {}
+  noContentResponse:
+    description: No content is returned by this API endpoint
   productResponse:
     description: Data structure representing a single product
     schema:
