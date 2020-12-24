@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-openapi/runtime/middleware"
+	gorilla_handlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/piapip/microservice/data"
 	sample_handlers "github.com/piapip/microservice/handlers"
@@ -57,6 +58,9 @@ func main() {
 	// And to give it source to download, we need to upload our swagger.yaml file to our server.
 	// The code below will do the trick. It will look for the specific swagger.yaml file in our baseDir.
 	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
+
+	// CORS
+	corsHandler := gorilla_handlers.CORS()
 
 	// SERVER CONFIGURATION
 	// Customized server:
