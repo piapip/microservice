@@ -1,11 +1,22 @@
+# Lesson 9: CORS
+
+As usual, a problem during dev phase, here's how to handle cors with gorilla.\
+import this: "github.com/gorilla/handlers"\
+then this: corsHandler := gorilla_handlers.CORS(gorilla_handlers.AllowedOrigins([]string{"*"}))\
+then in the server handler, change from \
+    Handler:      serveMux     -----------------to------------------>     Handler:      corsHandler(serveMux)
+
+REMEMBER: IN THE CLIENT SIDE, YOU HAVE TO SPECIFY THE BACKEND SERVER AS "http://loca..." NOT JUST "loca...", otherwise it won't work
+
 # TRY 8: Generate code for client side with swagger 
 
-Command
-swagger generate client -f ./swagger.yaml --target=sdk/ -A api 
-the --target seems to be crucial because without it, it will generate code directly to this microservice folder and it would be messy and noone wants that.
-Without the --target, all the import will be messed up too.
-TLDR: --target is the must.
+Command\
+swagger generate client -f ./swagger.yaml --target=sdk/ -A api \
+the --target seems to be crucial because without it, it will generate code directly to this microservice folder and it would be messy and noone wants that.\
+Without the --target, all the import will be messed up too.\
+TLDR: --target is the must.\
 It also has some bugs that related to not being able to find the spec file (my swagger.yaml file) so it's better for my head to just do it where the swagger.yaml file is.
+
 DEBUGGING is important. Learn how to do that.
 
 # Lesson 7: Swagger
@@ -18,7 +29,7 @@ The best way to understand all the parameters in swagger docs thingy is to actua
 
 # Lesson 6: JSON Validation
 
-Using Validator package to create some validators for our model Products and implement the validator to the middleware.
+Using Validator package to create some validators for our model Products and implement the validator to the middleware.\
 Validator needs to have both built-in validation requirements (such as name, email,...) and customized requirements (in this lesson is SKU)
 
 # Lesson 5: Gorilla
@@ -38,18 +49,18 @@ So with traditional, raw Golang, we can't define placeholder for the URL, like t
 
 # Lesson 3: RESTful
 
-RESTful methods: GET.
-Working with data. Just some half-ass created data. Not with proper database yet.
+RESTful methods: GET.\
+Working with data. Just some half-ass created data. Not with proper database yet.\
 Using Encoder and working with JSON format.
 
 # Lesson 2: Introduction 2.
 
-Refactor code to regroup handlers. Using ServeMux to use customized handler instead of defaultHandle in the ListenAndServe.
+Refactor code to regroup handlers. Using ServeMux to use customized handler instead of defaultHandle in the ListenAndServe.\
 Learn how to config basic stat of a server like Address, handler, IdleTimeout,... and gracefully shutdown.
 
 # Lesson 1: Introduction.
 
-Learn how to initiate a simple server that can send information. 
-A very simple GET request. (doesn't specify that's a GET request though)
-Learn what http package can do.
+Learn how to initiate a simple server that can send information.\
+A very simple GET request. (doesn't specify that's a GET request though)\
+Learn what http package can do.\
 Remember that http also help you handle errors if there's any.

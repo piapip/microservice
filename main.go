@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-openapi/runtime/middleware"
+	gorilla_handlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/piapip/microservice/data"
 	sample_handlers "github.com/piapip/microservice/handlers"
@@ -58,11 +59,15 @@ func main() {
 	// The code below will do the trick. It will look for the specific swagger.yaml file in our baseDir.
 	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
+	// CORS
+	corsHandler := gorilla_handlers.CORS(gorilla_handlers.AllowedOrigins([]string{"http://localhost:3000"}))
+	// corsHandler := gorilla_handlers.CORS(gorilla_handlers.AllowedOrigins([]string{"*"})) // wild card, don't do this pliz.
+
 	// SERVER CONFIGURATION
 	// Customized server:
 	server := &http.Server{
 		Addr:         ":9090",
-		Handler:      serveMux,
+		Handler:      corsHandler(serveMux),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,

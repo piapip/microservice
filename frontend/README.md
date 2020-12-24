@@ -1,0 +1,1 @@
+Just a simple frontend to demonstrate our backend.
