@@ -1,3 +1,3 @@
 export default {
-  BACKEND_SERVER: 'localhost:9090'
+  BACKEND_SERVER: 'http://localhost:9090'
 }

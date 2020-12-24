@@ -60,13 +60,14 @@ func main() {
 	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
 	// CORS
-	corsHandler := gorilla_handlers.CORS()
+	corsHandler := gorilla_handlers.CORS(gorilla_handlers.AllowedOrigins([]string{"http://localhost:3000"}))
+	// corsHandler := gorilla_handlers.CORS(gorilla_handlers.AllowedOrigins([]string{"*"})) // wild card, don't do this pliz.
 
 	// SERVER CONFIGURATION
 	// Customized server:
 	server := &http.Server{
 		Addr:         ":9090",
-		Handler:      serveMux,
+		Handler:      corsHandler(serveMux),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
