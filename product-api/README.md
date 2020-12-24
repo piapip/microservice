@@ -1,3 +1,9 @@
+# Lesson 10: Files
+
+First step towards microservice, file allocation, all the files must be positioned correctly. Microservice is pretty much all about structure. So if you messed up like I did, take some time and reorganize. Since I have no experience whatsoever to know if this structure will spawn any kind of bugs later on, I think it's safe to say that there's no weird bug or weird warning after generating swagger docs, and swagger sdk is a huge stepforward.
+
+
+
 # Lesson 9: CORS
 
 As usual, a problem during dev phase, here's how to handle cors with gorilla.\
