@@ -1,4 +1,4 @@
-module github.com/piapip/microservice
+module github.com/piapip/microservice/product-api
 
 go 1.14
 
