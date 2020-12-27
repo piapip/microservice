@@ -23,5 +23,5 @@ func TestSDK(t *testing.T) {
 	fmt.Printf("%#v", products.GetPayload()[0])
 
 	// Intentionally fail this test to print out products
-	t.Fail()
+	// t.Fail()
 }

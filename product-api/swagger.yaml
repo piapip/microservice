@@ -11,7 +11,7 @@ definitions:
         type: string
         x-go-name: Message
     type: object
-    x-go-package: github.com/piapip/microservice/handlers/products
+    x-go-package: github.com/piapip/microservice/product-api/handlers/products
   Product:
     properties:
       description:
@@ -49,7 +49,7 @@ definitions:
     - sku
     title: Product for some goods.
     type: object
-    x-go-package: github.com/piapip/microservice/data
+    x-go-package: github.com/piapip/microservice/product-api/data
   ValidationError:
     description: ValidationError is a collection of validation error messages
     properties:
@@ -59,7 +59,7 @@ definitions:
         type: array
         x-go-name: Messages
     type: object
-    x-go-package: github.com/piapip/microservice/handlers/products
+    x-go-package: github.com/piapip/microservice/product-api/handlers/products
 info:
   description: Documentation for Product API
   title: Product API
