@@ -5,7 +5,7 @@ import { Row, Col } from 'antd'
 import Header from '../components/Header'
 import ItemList from '../components/ItemList'
 import SearchBar from '../components/SearchBar'
-import config from '../config'
+import { config } from '../config'
 
 export default function HomePage() {
 
@@ -29,11 +29,6 @@ export default function HomePage() {
       await axios.get(`${config.BACKEND_SERVER}/products`)
         .then(async (response) => {
           await setItems(response.data)
-          // const filterResult = await items.filter(item => {
-          //   console.log(item)
-          //   return item.name.includes(searchTarget)
-          // })
-          // await setShowItems(filterResult)  
         })
         .catch(err => {
           console.log(err)
@@ -45,9 +40,8 @@ export default function HomePage() {
   }, [searchTarget]);
 
   const showItems = items.filter(item => {
-      return item.name.includes(searchTarget)
-    })
-  
+    return item.name.includes(searchTarget)
+  })
 
   return (
     <>
