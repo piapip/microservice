@@ -1,8 +1,8 @@
 # Lesson 11: HTTP multi-part Requests
 
-It seems to be deprecated. When browser were just static HTML, there weren't a lot of JS framework to use, if you want to send a request, you'll have a button and you'd be using HTML form, push the form and the browser will do the rest. Browser then sends given data in a data format called **multi-part form data**. It's HTTP data, combination of text and binary information and it would separate by using boundaries. It's not RESTful. NOTE: handler is designed to deal with REST.
+It seems to be deprecated. It's used for uploading stuff, like images, or audios, or videos,... When browser were just static HTML, there weren't a lot of JS framework to use, if you want to send a request, you'll have a button and you'd be using HTML form, push the form and the browser will do the rest. Browser then sends given data in a data format called **multi-part form data**. It's HTTP data, combination of text and binary information and it would separate by using boundaries. It's not RESTful. NOTE: handler is designed to deal with REST.
 
-It just happens so that I need to learn uploading file. antd <Upload /> desgin is so shit lol.
+It just happens so that I need to learn uploading file. antd Upload / desgin is so shit lol.
 
 # Lesson 10: Files
 
