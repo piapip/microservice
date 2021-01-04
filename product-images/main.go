@@ -44,7 +44,8 @@ func main() {
 	// filename regex: {filename:[a-zA-Z]+\\.[a-z]{3}} <- this regex is pretty stupid but it's good enough for now.
 	// A little bit difference compared to product-api
 	postHandler := serveMux.Methods(http.MethodPost).Subrouter()
-	postHandler.HandleFunc("/images/{id:[0-9]+}/{filename:[a-zA-Z]+\\.[a-z]{3}}", fileHandlers.ServeHTTP)
+	postHandler.HandleFunc("/images/{id:[0-9]+}/{filename:[a-zA-Z]+\\.[a-z]{3}}", fileHandlers.UploadREST)
+	postHandler.HandleFunc("/", fileHandlers.UploadMultipart)
 
 	// When I call the GET, please give me the picture, it will find the path given from http.Dir,
 	// then it tracks down the path based on the URL, this case is: basePath/images/1/test.jpg
