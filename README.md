@@ -2,7 +2,7 @@
 
 Though, we can transfer raw data normally between devices but when the file's size gets to a certain extent, we will have to think about Quality of Use. What if they have weak Internet, what if their device is not good enough to process raw data all at once. That's when we think of zipping data. Remind you, zipping and unzipping data is not free, it costs CPU but it's worth the effort.
 
-Here's a command to try out with CURL, since I don't know how to use --compressed tag in Insomnia. 
+Here's a command to try out with CURL, since I don't know how to use --compressed tag in Insomnia.\ 
 curl -v http://localhost:9091/images/2/cosmopolitan.jpg --compressed -o file.jpg
 
 # Lesson 11: HTTP multi-part Requests
