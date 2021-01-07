@@ -40,6 +40,7 @@ func main() {
 
 	// create files handlers
 	fileHandlers := handlers.NewFiles(storage, logger)
+	middlewareHandler := handlers.GzipHandler{}
 
 	// filename regex: {filename:[a-zA-Z]+\\.[a-z]{3}} <- this regex is pretty stupid but it's good enough for now.
 	// A little bit difference compared to product-api
@@ -53,6 +54,7 @@ func main() {
 	// It's specially built for this purpose so don't ask too much about it.
 	getHandler := serveMux.Methods(http.MethodGet).Subrouter()
 	getHandler.Handle("/images/{id:[0-9]+}/{filename:[a-zA-Z]+\\.[a-z]{3}}", http.StripPrefix("/images/", http.FileServer(http.Dir(basePath))))
+	getHandler.Use(middlewareHandler.GzipMiddleware)
 
 	// create a logger for the server from the default logger
 	serverLogger := logger.StandardLogger(&hclog.StandardLoggerOptions{InferLevels: true})

@@ -1,3 +1,10 @@
+# Lesson 12: Gzipping audio
+
+Though, we can transfer raw data normally between devices but when the file's size gets to a certain extent, we will have to think about Quality of Use. What if they have weak Internet, what if their device is not good enough to process raw data all at once. That's when we think of zipping data. Remind you, zipping and unzipping data is not free, it costs CPU but it's worth the effort.
+
+Here's a command to try out with CURL, since I don't know how to use --compressed tag in Insomnia. 
+curl -v http://localhost:9091/images/2/cosmopolitan.jpg --compressed -o file.jpg
+
 # Lesson 11: HTTP multi-part Requests
 
 It seems to be deprecated. It's used for uploading stuff, like images, or audios, or videos,... When browser were just static HTML, there weren't a lot of JS framework to use, if you want to send a request, you'll have a button and you'd be using HTML form, push the form and the browser will do the rest. Browser then sends given data in a data format called **multi-part form data**. It's HTTP data, combination of text and binary information and it would separate by using boundaries. It's not RESTful. NOTE: handler is designed to deal with REST.
