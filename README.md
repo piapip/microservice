@@ -1,3 +1,12 @@
+# Lesson 13: gRPC
+
+With JSON based service and RESTful approach, HTTP requests, that way works great, easy to use, widely understood. But the problem is that it's not performance optimized. It's required a large amount of steps building client, server, intergration, ...\
+gRPC is a new approach that Google came up with the intention behind which is, we are still using the standard protocols, but this time, it's going to be "HTTP to" as opposed of "HTTP" and rather than JSON, we're going to use binary based message protocol called **PROTOBUF**.\
+Protobuf, since they are already binary so it's gonna be faster to serialize and send it. And it ends up we defining interfaces - proto files - and anybody can generate a client based of these proto files that we created.\
+
+
+
+
 # Lesson 12: Gzipping audio
 
 Though, we can transfer raw data normally between devices but when the file's size gets to a certain extent, we will have to think about Quality of Use. What if they have weak Internet, what if their device is not good enough to process raw data all at once. That's when we think of zipping data. Remind you, zipping and unzipping data is not free, it costs CPU but it's worth the effort.
