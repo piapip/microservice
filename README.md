@@ -4,7 +4,15 @@ With JSON based service and RESTful approach, HTTP requests, that way works grea
 gRPC is a new approach that Google came up with the intention behind which is, we are still using the standard protocols, but this time, it's going to be "HTTP to" as opposed of "HTTP" and rather than JSON, we're going to use binary based message protocol called **PROTOBUF**.\
 Protobuf, since they are already binary so it's gonna be faster to serialize and send it. And it ends up we defining interfaces - proto files - and anybody can generate a client based of these proto files that we created.\
 
+In the new version of protoc plugins are not used anymore, to compile your .proto file to grpc you need to install protoc-gen-go-grpc. Basically you need both protoc-gen-go and protoc-gen-go-grpc.\
 
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+protoc -I protos/ --go-grpc_out=protos/currency --go_out=protos/currency protos/currency.proto
+
+In this lesson, we will take a look at the generated code where it contains interface for us to implement to get ourselves a server.\
+It will generate a `register...server` kinda function and we will have to implement it to get ourselves a server.
+
+gRPC is not RESTful so things like cURL and Insomnia won't work if we want to test it out if it's running properly, we'll have to write test for it.
 
 
 # Lesson 12: Gzipping audio
