@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+service Currency {
+    rpc GetRate (RateRequest) returns (RateResponse );
+}
+
+// RateRequest is input for GetRate
+message RateRequest {
+    string Base = 1;
+    // need to specify the location in the message format <<<< VERY IMPORTANT >>>>
+    string Destination = 2;
+}
+
+// RateResponse is output for GetRate
+message RateResponse {
+    float Rate = 1;
+}
