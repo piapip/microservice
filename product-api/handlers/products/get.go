@@ -66,11 +66,19 @@ func (p *Products) ListSingle(res http.ResponseWriter, rq *http.Request) {
 
 	// get exchange rate from currency client
 	rateRequest := &protoServer.RateRequest{
-		Base: protoServer.Currencies(protoServer.Currencies_value["EUR"]),
-		// Destination: protoServer.Currencies(protoServer.Currencies_value["EUR"]),
-		// Destination:
+		Base:        protoServer.Currencies(protoServer.Currencies_value["EUR"]),
+		Destination: protoServer.Currencies(protoServer.Currencies_value["GBP"]),
 	}
-	p.currencyClient.GetRate(context.Background())
+
+	response, err := p.currencyClient.GetRate(context.Background(), rateRequest)
+	if err != nil {
+		p.logger.Println("[Error] error getting new rate", err)
+		data.ToJSON(&GenericError{Message: err.Error()}, res)
+	}
+
+	// p.logger.Printf("Resp: %#v", response)
+
+	product.Price = product.Price * response.Rate
 
 	err = data.ToJSON(product, res)
 	if err != nil {

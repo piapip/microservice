@@ -1,5 +1,7 @@
 The stepping stone for the lesson.
 
+# Lesson 14: gRPC Client Connections
+
 # Lesson 9: CORS
 
 # TRY 8: Generate code for client side with swagger 
