@@ -7,7 +7,7 @@ import (
 	protoS "github.com/piapip/microservice/currency/protoS/currency"
 )
 
-// Currency - ...
+// Currency is a gRPC server it implements the methods defined by the CurrencyServer interface
 type Currency struct {
 	protoS.UnimplementedCurrencyServer
 	logger hclog.Logger
@@ -18,7 +18,8 @@ func NewCurrency(l hclog.Logger) *Currency {
 	return &Currency{logger: l}
 }
 
-// GetRate - ...
+// GetRate implements the CurrencyServer GetRate method and returns the currency exchange rate
+// for the two given currencies.
 func (c *Currency) GetRate(ctx context.Context, rr *protoS.RateRequest) (*protoS.RateResponse, error) {
 	c.logger.Info("Handle GetRate", "base", rr.GetBase(), "destination", rr.GetDestination())
 

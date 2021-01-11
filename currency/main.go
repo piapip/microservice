@@ -16,6 +16,8 @@ func main() {
 
 	// Prepare to create server
 	currencyServer := server.NewCurrency(logger)
+
+	// create a new gRPC server, use WithInsecure to allow http connections
 	grpcServer := grpc.NewServer()
 
 	// Create
@@ -28,12 +30,13 @@ func main() {
 	// grpcServer has a method called "Serve". Serve() is kinda similar to ListenAndServe in normal Go.
 	// The difference is we have to specify a "net listener" for grpc server.
 
-	// Get a net listener
+	// Get a net listener, create a TCP socket for inbound server connections
 	l, err := net.Listen("tcp", ":9092")
 	if err != nil {
 		logger.Error("Unable to listen", "error", err)
 		os.Exit(1)
 	}
 
+	// listen for requests
 	grpcServer.Serve(l)
 }

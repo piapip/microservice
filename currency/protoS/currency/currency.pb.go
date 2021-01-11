@@ -25,6 +25,7 @@ const (
 // of the legacy proto package is being used.
 const _ = proto.ProtoPackageIsVersion4
 
+// Currencies is an enum which represents the allowed currencies for the API
 type Currencies int32
 
 const (
@@ -164,14 +165,16 @@ func (Currencies) EnumDescriptor() ([]byte, []int) {
 	return file_currency_proto_rawDescGZIP(), []int{0}
 }
 
-// RateRequest is input for GetRate
+// RateRequest defines the request for a GetRate call
 type RateRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// Base is the base currency code for the rate
 	Base Currencies `protobuf:"varint,1,opt,name=Base,proto3,enum=Currencies" json:"Base,omitempty"`
-	// need to specify the location in the message format <<<< VERY IMPORTANT >>>>
+	// Destination is the destination currency code for the rate
+	// need to specify the location in the message format <<<< VERY IMPORTANT >>>> ... what does that mean though...
 	Destination Currencies `protobuf:"varint,2,opt,name=Destination,proto3,enum=Currencies" json:"Destination,omitempty"`
 }
 
@@ -221,7 +224,9 @@ func (x *RateRequest) GetDestination() Currencies {
 	return Currencies_EUR
 }
 
-// RateResponse is output for GetRate
+// RateResponse is the response from a GetRate call, it contains
+// rate which is a floating point number and can be used to convert between the
+// two currencies specified in the request.
 type RateResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
