@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 
+	protoServer "github.com/piapip/microservice/currency/protoS/currency"
 	"github.com/piapip/microservice/data"
 )
 
@@ -61,6 +63,14 @@ func (p *Products) ListSingle(res http.ResponseWriter, rq *http.Request) {
 		data.ToJSON(&GenericError{Message: err.Error()}, res)
 		return
 	}
+
+	// get exchange rate from currency client
+	rateRequest := &protoServer.RateRequest{
+		Base: protoServer.Currencies(protoServer.Currencies_value["EUR"]),
+		// Destination: protoServer.Currencies(protoServer.Currencies_value["EUR"]),
+		// Destination:
+	}
+	p.currencyClient.GetRate(context.Background())
 
 	err = data.ToJSON(product, res)
 	if err != nil {

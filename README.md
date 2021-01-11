@@ -1,3 +1,14 @@
+# Lesson 14: gRPC Client Connections
+
+Using enum in protos. In many cases, we only take a handful of options as input, e.g: There're only so many currencies type out there in the world, so we won't accept any kind of string as inputs.\
+
+In this lesson, we'll try to call api in ./currency from ./product-api. \
+In order to do that, we will need to construct a client that allow us to call the currency server. What we kinda need to do is to use that proto file and use the client that it generated for us. The currency client in gRPC is generated in the file currency_grpc.pb.go (in the tutorial video, it's in the currency.pb.go).\ 
+It's literally `type CurrencyClient interface {...}` and it has the method NewCurrencyClient right below for us to create a client server.
+
+To create a client from grcp generated file, We'll need to initiate to a particular service, gRPC ClientConnection interface, then pass it to the New...Client(), the way we create connect in gRPC is kinda the exact way we create connection using "net"
+
+gRPC has a thing called CallOption, we'll take a look at that later.
 # Lesson 13: gRPC
 
 With JSON based service and RESTful approach, HTTP requests, that way works great, easy to use, widely understood. But the problem is that it's not performance optimized. It's required a large amount of steps building client, server, intergration, ...\

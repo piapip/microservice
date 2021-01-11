@@ -10,15 +10,28 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	gorilla_handlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	protoServer "github.com/piapip/microservice/currency/protoS/currency"
 	"github.com/piapip/microservice/data"
 	sample_handlers "github.com/piapip/microservice/handlers"
 	handlers "github.com/piapip/microservice/handlers/products"
 	"golang.org/x/net/context"
+	"google.golang.org/grpc"
 )
 
 func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
 	validator := data.NewValidation()
+
+	// create a gRPC Client connection
+	conn, err := grpc.Dial("localhost:9092")
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()
+
+	// create currency client
+	currencyClient := protoServer.NewCurrencyClient(conn)
+	// We'll try to make it that it will automatically trigger GetRate everytime we call these API endpoints.
 
 	// Create a new serve mux and register the handlers
 	serveMux := mux.NewRouter()
@@ -30,7 +43,7 @@ func main() {
 	serveMux.Handle("/goodbye", goodbyeHandler)
 
 	// Create the handlers for Products
-	productsHandler := handlers.NewProducts(logger, validator)
+	productsHandler := handlers.NewProducts(logger, validator, currencyClient)
 
 	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
 	getRouter.HandleFunc("/products", productsHandler.ListAll)

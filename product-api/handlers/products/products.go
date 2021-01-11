@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	protoServer "github.com/piapip/microservice/currency/protoS/currency"
 	"github.com/piapip/microservice/data"
 )
 
@@ -15,13 +16,14 @@ type KeyProduct struct{}
 
 // Products handler for getting and updating products
 type Products struct {
-	logger    *log.Logger
-	validator *data.Validation
+	logger         *log.Logger
+	validator      *data.Validation
+	currencyClient protoServer.CurrencyClient
 }
 
 // NewProducts returns a new products handler with the given logger
-func NewProducts(logger *log.Logger, validator *data.Validation) *Products {
-	return &Products{logger, validator}
+func NewProducts(logger *log.Logger, validator *data.Validation, cc protoServer.CurrencyClient) *Products {
+	return &Products{logger, validator, cc}
 }
 
 // ErrorInvalidProductPath is an error message when the product path is not valid
