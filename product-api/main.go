@@ -13,7 +13,7 @@ import (
 	protoServer "github.com/piapip/microservice/currency/protoS/currency"
 	"github.com/piapip/microservice/data"
 	sample_handlers "github.com/piapip/microservice/handlers"
-	handlers "github.com/piapip/microservice/handlers/products"
+	handlers "github.com/piapip/microservice/product-api/handlers/products"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
@@ -23,7 +23,7 @@ func main() {
 	validator := data.NewValidation()
 
 	// create a gRPC Client connection
-	conn, err := grpc.Dial("localhost:9092")
+	conn, err := grpc.Dial("localhost:9092", grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}

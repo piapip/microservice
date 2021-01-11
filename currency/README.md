@@ -1,3 +1,5 @@
+# Lesson 14: gRPC Client Connections
+
 # Lesson 13: gRPC
 
 In a proto file, we will define services and methods for services and messages for methods.

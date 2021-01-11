@@ -6,13 +6,16 @@ In this lesson, we'll try to call api in ./currency from ./product-api. \
 In order to do that, we will need to construct a client that allow us to call the currency server. What we kinda need to do is to use that proto file and use the client that it generated for us. The currency client in gRPC is generated in the file currency_grpc.pb.go (in the tutorial video, it's in the currency.pb.go).\ 
 It's literally `type CurrencyClient interface {...}` and it has the method NewCurrencyClient right below for us to create a client server.
 
-To create a client from grcp generated file, We'll need to initiate to a particular service, gRPC ClientConnection interface, then pass it to the New...Client(), the way we create connect in gRPC is kinda the exact way we create connection using "net"
+To create a client from grcp generated file, We'll need to initiate to a particular service, gRPC ClientConnection interface, then pass it to the New...Client(), the way we create connect in gRPC is kinda the exact way we create connection using "net".
 
-gRPC has a thing called CallOption, we'll take a look at that later.
+Not much going on in this chapter tbh, it's just us calling generated client interface to our main code. Use what we've generated before.
+
+gRPC has a thing called CallOption. Like cors, it won't let anything to call into it, so if we use gRPC.WithInsecure(), it's an option which says don't worry about any client or server side certificates, totally fine in development, totally not fine in production.
+
 # Lesson 13: gRPC
 
 With JSON based service and RESTful approach, HTTP requests, that way works great, easy to use, widely understood. But the problem is that it's not performance optimized. It's required a large amount of steps building client, server, intergration, ...\
-gRPC is a new approach that Google came up with the intention behind which is, we are still using the standard protocols, but this time, it's going to be "HTTP to" as opposed of "HTTP" and rather than JSON, we're going to use binary based message protocol called **PROTOBUF**.\
+gRPC is a new approach that Google came up with the intention behind which is, we are still using the standard protocols, but this time, it's going to be "HTTP 2" as opposed of "HTTP" and rather than JSON, we're going to use binary based message protocol called **PROTOBUF**.\
 Protobuf, since they are already binary so it's gonna be faster to serialize and send it. And it ends up we defining interfaces - proto files - and anybody can generate a client based of these proto files that we created.\
 
 In the new version of protoc plugins are not used anymore, to compile your .proto file to grpc you need to install protoc-gen-go-grpc. Basically you need both protoc-gen-go and protoc-gen-go-grpc.\
