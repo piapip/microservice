@@ -15,7 +15,9 @@ require (
 	github.com/hashicorp/go-hclog v0.15.0 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/piapip/microservice v0.0.0-20201224110212-546c6e933ed0
+	github.com/piapip/microservice/currency v0.0.0-20210109061300-9ffcf75a0a14
 	github.com/stretchr/testify v1.6.1
 	go.mongodb.org/mongo-driver v1.4.4 // indirect
 	golang.org/x/net v0.0.0-20201202161906-c7110b5ffcbb
+	google.golang.org/grpc v1.34.0
 )
