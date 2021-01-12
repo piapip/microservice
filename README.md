@@ -1,3 +1,7 @@
+# Practice 15: Refactoring
+
+1. Retrieve real currency conversion rate and implement to the service. 
+
 # Lesson 14: gRPC Client Connections
 
 Using enum in protos. In many cases, we only take a handful of options as input, e.g: There're only so many currencies type out there in the world, so we won't accept any kind of string as inputs.\
