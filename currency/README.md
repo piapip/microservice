@@ -4,6 +4,7 @@
 
 In a proto file, we will define services and methods for services and messages for methods.
 <!-- protoc -I protos/ --go-grpc_out=protos/currency protos/currency.proto -->
+protoc -I protos/ --go_opt=paths=protos/currency --go_out=. --go-grpc_out=. protos/currency.proto 
 protoc -I protos/ --go-grpc_out=protos/currency --go_out=protos/currency protos/currency.proto
 
 Test server: 

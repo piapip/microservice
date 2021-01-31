@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/piapip/microservice/data"
+	"github.com/piapip/microservice/product-api/data"
 )
 
 // swagger:route DELETE /products/{id} products deleteProduct
@@ -18,11 +18,11 @@ import (
 func (p *Products) Delete(res http.ResponseWriter, rq *http.Request) {
 	id := getProductID(rq)
 
-	p.logger.Println("[DEBUG] delete product id: ", id)
+	p.logger.Debug("Delete product", "id", id)
 
-	err := data.DeleteProduct(id)
+	err := p.productDB.DeleteProduct(id)
 	if err == data.ErrorProductNotFound {
-		p.logger.Println("[ERROR] deleting record id does not exist")
+		p.logger.Error("Unable to delete record", "error", err)
 
 		// http.Error(res, "Product not found", http.StatusNotFound)
 		res.WriteHeader(http.StatusNotFound)
@@ -31,7 +31,7 @@ func (p *Products) Delete(res http.ResponseWriter, rq *http.Request) {
 	}
 
 	if err != nil {
-		p.logger.Println("[ERROR] deleting record", err)
+		p.logger.Error("Unable to delete record", "error", err)
 
 		res.WriteHeader(http.StatusInternalServerError)
 		data.ToJSON(&GenericError{Message: err.Error()}, res)

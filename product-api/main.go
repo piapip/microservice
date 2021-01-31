@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -10,17 +9,28 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	gorilla_handlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	hclog "github.com/hashicorp/go-hclog"
 	protoServer "github.com/piapip/microservice/currency/protoS/currency"
-	"github.com/piapip/microservice/data"
-	sample_handlers "github.com/piapip/microservice/handlers"
+	"github.com/piapip/microservice/product-api/data"
+	sample_handlers "github.com/piapip/microservice/product-api/handlers"
 	handlers "github.com/piapip/microservice/product-api/handlers/products"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
+	// logger := log.New(os.Stdout, "product-api", log.LstdFlags)
+	logger := hclog.Default()
 	validator := data.NewValidation()
+
+	// Create a new serve mux and register the handlers
+	serveMux := mux.NewRouter()
+
+	// Create the sample handlers
+	helloHandler := sample_handlers.NewHello(logger)
+	serveMux.Handle("/hello", helloHandler)
+	goodbyeHandler := sample_handlers.NewGoodbye(logger)
+	serveMux.Handle("/goodbye", goodbyeHandler)
 
 	// create a gRPC Client connection
 	conn, err := grpc.Dial("localhost:9092", grpc.WithInsecure())
@@ -33,17 +43,11 @@ func main() {
 	currencyClient := protoServer.NewCurrencyClient(conn)
 	// We'll try to make it that it will automatically trigger GetRate everytime we call these API endpoints.
 
-	// Create a new serve mux and register the handlers
-	serveMux := mux.NewRouter()
-
-	// Create the sample handlers
-	helloHandler := sample_handlers.NewHello(logger)
-	serveMux.Handle("/hello", helloHandler)
-	goodbyeHandler := sample_handlers.NewGoodbye(logger)
-	serveMux.Handle("/goodbye", goodbyeHandler)
+	// create a database instance, since now we are doing dependencies injection.
+	db := data.NewProductsDB(currencyClient, logger)
 
 	// Create the handlers for Products
-	productsHandler := handlers.NewProducts(logger, validator, currencyClient)
+	productsHandler := handlers.NewProducts(logger, validator, db)
 
 	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
 	getRouter.HandleFunc("/products", productsHandler.ListAll)
@@ -81,13 +85,14 @@ func main() {
 	server := &http.Server{
 		Addr:         ":9090",
 		Handler:      corsHandler(serveMux),
+		ErrorLog:     logger.StandardLogger(&hclog.StandardLoggerOptions{}), // set the logger for the server
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  120 * time.Second,
 	}
 
 	go func() {
-		logger.Println("Stating server on port ", server.Addr)
+		logger.Info("Stating server on port ", server.Addr)
 		// So normally, this http.ListenAndServe will look for handler from the default ServeMux.
 		// But often enough, we want to specify exact which handler to use (for better visibility and we want to sort things our way).
 		// So we assign our own server instead of using the default one.
@@ -95,7 +100,7 @@ func main() {
 		// http.ListenAndServe(":9090", serveMux)
 		err := server.ListenAndServe()
 		if err != nil {
-			logger.Fatal(err)
+			logger.Error("Unable to start server", "error", err)
 			os.Exit(1)
 		}
 	}()
@@ -113,12 +118,12 @@ func main() {
 
 	switch {
 	case receivedSignal == os.Interrupt || receivedSignal == os.Kill:
-		logger.Println("\nReceived terminate, gracefully shutdown", receivedSignal)
+		logger.Info("\nReceived terminate, gracefully shutdown", receivedSignal)
 		shutdownContext, cancelFunc := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancelFunc()
 		server.Shutdown(shutdownContext)
 
 	default:
-		logger.Fatal("FOREIGN SIGNAL!")
+		logger.Error("FOREIGN SIGNAL!")
 	}
 }

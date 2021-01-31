@@ -2,13 +2,12 @@ package handlers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
-	protoServer "github.com/piapip/microservice/currency/protoS/currency"
-	"github.com/piapip/microservice/data"
+	hclog "github.com/hashicorp/go-hclog"
+	"github.com/piapip/microservice/product-api/data"
 )
 
 // KeyProduct is a key used for the Product object in the context
@@ -16,14 +15,14 @@ type KeyProduct struct{}
 
 // Products handler for getting and updating products
 type Products struct {
-	logger         *log.Logger
-	validator      *data.Validation
-	currencyClient protoServer.CurrencyClient
+	logger    hclog.Logger
+	validator *data.Validation
+	productDB *data.ProductsDB
 }
 
 // NewProducts returns a new products handler with the given logger
-func NewProducts(logger *log.Logger, validator *data.Validation, cc protoServer.CurrencyClient) *Products {
-	return &Products{logger, validator, cc}
+func NewProducts(logger hclog.Logger, validator *data.Validation, productDB *data.ProductsDB) *Products {
+	return &Products{logger, validator, productDB}
 }
 
 // ErrorInvalidProductPath is an error message when the product path is not valid
