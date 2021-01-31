@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/piapip/microservice/data"
+	"github.com/piapip/microservice/product-api/data"
 )
 
 // swagger:route PUT /products products updateProduct
@@ -16,12 +16,15 @@ import (
 
 // Update handles PUT requests to update products
 func (p *Products) Update(res http.ResponseWriter, req *http.Request) {
-	targetedProduct := req.Context().Value(KeyProduct{}).(data.Product)
-	p.logger.Println("Handle PUT product id: ", targetedProduct.ID)
+	res.Header().Add("Content-Type", "application/json")
 
-	err := data.UpdateProduct(targetedProduct)
+	// fetch the product from the context
+	targetedProduct := req.Context().Value(KeyProduct{}).(data.Product)
+	p.logger.Debug("Handle PUT product", "id", targetedProduct.ID)
+
+	err := p.productDB.UpdateProduct(targetedProduct)
 	if err == data.ErrorProductNotFound {
-		p.logger.Println("[ERROR] updating product not found", err)
+		p.logger.Error("Unable to update product not found", "error", err)
 
 		// http.Error(res, "Product not found", http.StatusNotFound)
 		res.WriteHeader(http.StatusNotFound)
@@ -30,7 +33,7 @@ func (p *Products) Update(res http.ResponseWriter, req *http.Request) {
 	}
 
 	if err != nil {
-		p.logger.Println("[ERROR] deleting record", err)
+		p.logger.Error("Unable to delete record", "error", err)
 
 		res.WriteHeader(http.StatusInternalServerError)
 		data.ToJSON(&GenericError{Message: err.Error()}, res)

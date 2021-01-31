@@ -15,7 +15,7 @@
 // swagger:meta
 package handlers
 
-import "github.com/piapip/microservice/data"
+import "github.com/piapip/microservice/product-api/data"
 
 //
 // NOTE: Types defined here are purely for documentation purposes

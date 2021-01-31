@@ -1,11 +1,9 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 
-	protoServer "github.com/piapip/microservice/currency/protoS/currency"
-	"github.com/piapip/microservice/data"
+	"github.com/piapip/microservice/product-api/data"
 )
 
 // swagger:route GET /products products listProducts
@@ -16,7 +14,7 @@ import (
 
 // ListAll handles GET requests and returns all item in the list
 func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
-	p.logger.Println("[DEBUG] get all records")
+	p.logger.Debug("Get all records")
 
 	// We are returning text/plain here.
 	// Here's why: if we don't specify the content type, some functions in the auto gen codes (down side of using auto gen code) returns text/plain when it's provided a string.
@@ -26,12 +24,17 @@ func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
 	// CONFLICT!!! Have to solve it here.
 	res.Header().Add("Content-Type", "application/json")
 
-	products := data.GetProducts()
+	products, err := p.productDB.GetProducts("")
+	if err != nil {
+		res.WriteHeader(http.StatusInternalServerError)
+		data.ToJSON(&GenericError{Message: err.Error()}, res)
+		return
+	}
 
-	err := data.ToJSON(products, res)
+	err = data.ToJSON(products, res)
 	if err != nil {
 		// we should never be here but log the error just incase
-		p.logger.Println("[ERROR] serializing product", err)
+		p.logger.Error("Unable to serialize product", "error", err)
 	}
 }
 
@@ -44,41 +47,26 @@ func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
 
 // ListSingle handles GET requests, return the product with chosen ID.
 func (p *Products) ListSingle(res http.ResponseWriter, rq *http.Request) {
+	res.Header().Add("Content-Type", "application/json")
 	id := getProductID(rq)
 
-	p.logger.Println("[DEBUG] get record id", id)
+	p.logger.Debug("Get record", "id", id)
 
-	product, err := data.GetProductByID(id)
+	product, err := p.productDB.GetProductByID(id, "")
 
 	switch err {
 	case nil:
 	case data.ErrorProductNotFound:
-		p.logger.Println("[ERROR] fetching product", err)
+		p.logger.Error("Unable to fetch product", "error", err)
 		res.WriteHeader(http.StatusNotFound)
 		data.ToJSON(&GenericError{Message: err.Error()}, res)
 		return
 	default:
-		p.logger.Println("[ERROR] fetching product", err)
+		p.logger.Error("Unable to fetch product", "error", err)
 		res.WriteHeader(http.StatusInternalServerError)
 		data.ToJSON(&GenericError{Message: err.Error()}, res)
 		return
 	}
-
-	// get exchange rate from currency client
-	rateRequest := &protoServer.RateRequest{
-		Base:        protoServer.Currencies(protoServer.Currencies_value["EUR"]),
-		Destination: protoServer.Currencies(protoServer.Currencies_value["GBP"]),
-	}
-
-	response, err := p.currencyClient.GetRate(context.Background(), rateRequest)
-	if err != nil {
-		p.logger.Println("[Error] error getting new rate", err)
-		data.ToJSON(&GenericError{Message: err.Error()}, res)
-	}
-
-	// p.logger.Printf("Resp: %#v", response)
-
-	product.Price = product.Price * response.Rate
 
 	err = data.ToJSON(product, res)
 	if err != nil {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/piapip/microservice/data"
+	"github.com/piapip/microservice/product-api/data"
 )
 
 // MiddlewareProductValidation will extract the product struct from req, fill the empty struct with data then put it into req's Context() with Value of newProduct and key as KeyProduct{}
@@ -14,6 +14,7 @@ import (
 // Example: req.Context().Value(KeyProduct{}).(data.Product{}) <- the .(data.Product{}) is to convert the extracted data to Product struct.
 func (p *Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		res.Header().Add("Content-Type", "application/json")
 		// you can assign newProducts to data.Product{} (without &) but you'll also have to update other codes related to it.
 		// For example: models.AddProduct(newProduct)
 		//  will become models.AddProduct(newProduct).
@@ -25,7 +26,7 @@ func (p *Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 		// it will tell you that you fuck up the type.
 		err := data.FromJSON(newProduct, req.Body)
 		if err != nil {
-			p.logger.Println("[ERROR] deserializing products", err)
+			p.logger.Error("Unable to deserialize products", "error", err)
 
 			// http.Error(res, "Something's wrong with the server. Unable to convert from JSON to Product struct", http.StatusBadRequest)
 			res.WriteHeader(http.StatusBadRequest)
@@ -37,7 +38,7 @@ func (p *Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 		// it's errs, it will return error if you use "err" instead
 		errs := p.validator.Validate(newProduct)
 		if len(errs) != 0 {
-			p.logger.Println("[Error] validating product", errs)
+			p.logger.Error("Unable to validate product", "error", errs)
 
 			// return the validation messages as an array
 			// http.Error(res, fmt.Sprintf("Error validating product: %s", errs), http.StatusUnprocessableEntity)

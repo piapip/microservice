@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/piapip/microservice/sdk/client"
-	"github.com/piapip/microservice/sdk/client/products"
+	"github.com/piapip/microservice/product-api/sdk/client"
+	"github.com/piapip/microservice/product-api/sdk/client/products"
 )
 
 func TestSDK(t *testing.T) {
