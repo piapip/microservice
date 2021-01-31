@@ -4,8 +4,8 @@
 
 In a proto file, we will define services and methods for services and messages for methods.
 <!-- protoc -I protos/ --go-grpc_out=protos/currency protos/currency.proto -->
-protoc -I protos/ --go_opt=paths=protos/currency --go_out=. --go-grpc_out=. protos/currency.proto 
 protoc -I protos/ --go-grpc_out=protos/currency --go_out=protos/currency protos/currency.proto
+If I remove the "-I protos/", it still works, but instead of generating file to protoS/currency, it'll create another protos folder in protoS/currency and generate the files there...
 
 Test server: 
 grpcurl --plaintext localhost:9092 list

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	go_hclog "github.com/hashicorp/go-hclog"
+	"github.com/piapip/microservice/currency/data"
 	protoS "github.com/piapip/microservice/currency/protoS/currency"
 	"github.com/piapip/microservice/currency/server"
 	"google.golang.org/grpc"
@@ -13,9 +14,14 @@ import (
 
 func main() {
 	logger := go_hclog.Default()
+	rates, err := data.NewExchangeRates(logger)
+	if err != nil {
+		logger.Error("Unable to generate rates", "error", err)
+		os.Exit(1)
+	}
 
 	// Prepare to create server
-	currencyServer := server.NewCurrency(logger)
+	currencyServer := server.NewCurrency(rates, logger)
 
 	// create a new gRPC server, use WithInsecure to allow http connections
 	grpcServer := grpc.NewServer()
