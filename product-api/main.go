@@ -50,7 +50,10 @@ func main() {
 	productsHandler := handlers.NewProducts(logger, validator, db)
 
 	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
+	getRouter.HandleFunc("/products", productsHandler.ListAll).Queries("currency", "{[A-Z]{3}}")
 	getRouter.HandleFunc("/products", productsHandler.ListAll)
+
+	getRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.ListSingle).Queries("currency", "{[A-Z]{3}}")
 	getRouter.HandleFunc("/products/{id:[0-9]+}", productsHandler.ListSingle)
 
 	postRouter := serveMux.Methods(http.MethodPost).Subrouter()
