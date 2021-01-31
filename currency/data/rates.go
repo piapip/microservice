@@ -25,6 +25,23 @@ func NewExchangeRates(l hclog.Logger) (*ExchangeRates, error) {
 	return exchangeRate, err
 }
 
+// GetRate returns ratio of any 2 available currencies
+// return -1 if either base or destination is not an available currency
+func (e *ExchangeRates) GetRate(base string, destination string) (float64, error) {
+	// check if base and destination are available currencies
+	baseRate, ok := e.rates[base]
+	if !ok {
+		return -1, fmt.Errorf("Rate not found for currency %s", base)
+	}
+
+	destinationRate, ok := e.rates[base]
+	if !ok {
+		return -1, fmt.Errorf("Rate not found for currency %s", destination)
+	}
+
+	return destinationRate / baseRate, nil
+}
+
 // getRates will pull data from online API and map it to e.rate
 func (e *ExchangeRates) getRates() error {
 	response, err := http.DefaultClient.Get("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml")
@@ -52,6 +69,9 @@ func (e *ExchangeRates) getRates() error {
 
 		e.rates[cube.Currency] = rate
 	}
+
+	// hard code for the rate of EUR -> EUR
+	e.rates["EUR"] = 1
 
 	return nil
 }

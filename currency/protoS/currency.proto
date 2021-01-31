@@ -2,7 +2,7 @@ syntax = "proto3";
 
 service Currency {
   // GetRate returns the exchange rate for the two provided currency codes
-  rpc GetRate (RateRequest) returns (RateResponse );
+  rpc GetRate (RateRequest) returns (RateResponse);
 }
 
 // RateRequest defines the request for a GetRate call
@@ -18,7 +18,7 @@ message RateRequest {
 // rate which is a floating point number and can be used to convert between the 
 // two currencies specified in the request.
 message RateResponse {
-  float Rate = 1;
+  double Rate = 1;
 }
 
 // Currencies is an enum which represents the allowed currencies for the API
