@@ -13,7 +13,7 @@ import (
 //  200: productsResponse
 
 // ListAll handles GET requests and returns all item in the list
-func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
+func (p *Products) ListAll(res http.ResponseWriter, req *http.Request) {
 	p.logger.Debug("Get all records")
 
 	// We are returning text/plain here.
@@ -24,7 +24,9 @@ func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
 	// CONFLICT!!! Have to solve it here.
 	res.Header().Add("Content-Type", "application/json")
 
-	products, err := p.productDB.GetProducts("")
+	currency := req.URL.Query().Get("currency")
+
+	products, err := p.productDB.GetProducts(currency)
 	if err != nil {
 		res.WriteHeader(http.StatusInternalServerError)
 		data.ToJSON(&GenericError{Message: err.Error()}, res)
@@ -46,13 +48,15 @@ func (p *Products) ListAll(res http.ResponseWriter, rq *http.Request) {
 //  404: errorResponse
 
 // ListSingle handles GET requests, return the product with chosen ID.
-func (p *Products) ListSingle(res http.ResponseWriter, rq *http.Request) {
+func (p *Products) ListSingle(res http.ResponseWriter, req *http.Request) {
 	res.Header().Add("Content-Type", "application/json")
-	id := getProductID(rq)
+
+	id := getProductID(req)
+	currency := req.URL.Query().Get("currency")
 
 	p.logger.Debug("Get record", "id", id)
 
-	product, err := p.productDB.GetProductByID(id, "")
+	product, err := p.productDB.GetProductByID(id, currency)
 
 	switch err {
 	case nil:

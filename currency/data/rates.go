@@ -34,7 +34,7 @@ func (e *ExchangeRates) GetRate(base string, destination string) (float64, error
 		return -1, fmt.Errorf("Rate not found for currency %s", base)
 	}
 
-	destinationRate, ok := e.rates[base]
+	destinationRate, ok := e.rates[destination]
 	if !ok {
 		return -1, fmt.Errorf("Rate not found for currency %s", destination)
 	}
