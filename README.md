@@ -4,10 +4,10 @@
 
 # Lesson 14: gRPC Client Connections
 
-Using enum in protos. In many cases, we only take a handful of options as input, e.g: There're only so many currencies type out there in the world, so we won't accept any kind of string as inputs.\
+Using enum in protos. In many cases, we only take a handful of options as input, e.g: There're only so many currencies type out there in the world, so we won't accept any kind of string as inputs. <br />
 
-In this lesson, we'll try to call api in ./currency from ./product-api. \
-In order to do that, we will need to construct a client that allow us to call the currency server. What we kinda need to do is to use that proto file and use the client that it generated for us. The currency client in gRPC is generated in the file currency_grpc.pb.go (in the tutorial video, it's in the currency.pb.go).\ 
+In this lesson, we'll try to call api in ./currency from ./product-api. <br />
+In order to do that, we will need to construct a client that allow us to call the currency server. What we kinda need to do is to use that proto file and use the client that it generated for us. The currency client in gRPC is generated in the file currency_grpc.pb.go (in the tutorial video, it's in the currency.pb.go). <br />
 It's literally `type CurrencyClient interface {...}` and it has the method NewCurrencyClient right below for us to create a client server.
 
 To create a client from grcp generated file, We'll need to initiate to a particular service, gRPC ClientConnection interface, then pass it to the New...Client(), the way we create connect in gRPC is kinda the exact way we create connection using "net".
@@ -18,16 +18,16 @@ gRPC has a thing called CallOption. Like cors, it won't let anything to call int
 
 # Lesson 13: gRPC
 
-With JSON based service and RESTful approach, HTTP requests, that way works great, easy to use, widely understood. But the problem is that it's not performance optimized. It's required a large amount of steps building client, server, intergration, ...\
-gRPC is a new approach that Google came up with the intention behind which is, we are still using the standard protocols, but this time, it's going to be "HTTP 2" as opposed of "HTTP" and rather than JSON, we're going to use binary based message protocol called **PROTOBUF**.\
-Protobuf, since they are already binary so it's gonna be faster to serialize and send it. And it ends up we defining interfaces - proto files - and anybody can generate a client based of these proto files that we created.\
+With JSON based service and RESTful approach, HTTP requests, that way works great, easy to use, widely understood. But the problem is that it's not performance optimized. It's required a large amount of steps building client, server, intergration, ...<br />
+gRPC is a new approach that Google came up with the intention behind which is, we are still using the standard protocols, but this time, it's going to be "HTTP 2" as opposed of "HTTP" and rather than JSON, we're going to use binary based message protocol called **PROTOBUF**.<br />
+Protobuf, since they are already binary so it's gonna be faster to serialize and send it. And it ends up we defining interfaces - proto files - and anybody can generate a client based of these proto files that we created.<br />
 
-In the new version of protoc plugins are not used anymore, to compile your .proto file to grpc you need to install protoc-gen-go-grpc. Basically you need both protoc-gen-go and protoc-gen-go-grpc.\
+In the new version of protoc plugins are not used anymore, to compile your .proto file to grpc you need to install protoc-gen-go-grpc. Basically you need both protoc-gen-go and protoc-gen-go-grpc.<br />
 
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 protoc -I protos/ --go-grpc_out=protos/currency --go_out=protos/currency protos/currency.proto
 
-In this lesson, we will take a look at the generated code where it contains interface for us to implement to get ourselves a server.\
+In this lesson, we will take a look at the generated code where it contains interface for us to implement to get ourselves a server.<br />
 It will generate a `register...server` kinda function and we will have to implement it to get ourselves a server.
 
 gRPC is not RESTful so things like cURL and Insomnia won't work if we want to test it out if it's running properly, we'll have to write test for it.
@@ -54,7 +54,7 @@ Learn how to upload images file. I should be able to upload other file types, li
 
 # Lesson 9: CORS
 
-As usual, a problem during dev phase, here's how to handle cors with gorilla.\
+As usual, a problem during dev phase, here's how to handle cors with gorilla.<br />
 import this: "github.com/gorilla/handlers"\
 then this: corsHandler := gorilla_handlers.CORS(gorilla_handlers.AllowedOrigins([]string{"*"}))\
 then in the server handler, change from \
@@ -64,11 +64,11 @@ REMEMBER: IN THE CLIENT SIDE, YOU HAVE TO SPECIFY THE BACKEND SERVER AS "http://
 
 # TRY 8: Generate code for client side with swagger 
 
-Command\
-swagger generate client -f ./swagger.yaml --target=sdk/ -A api \
-the --target seems to be crucial because without it, it will generate code directly to this microservice folder and it would be messy and noone wants that.\
-Without the --target, all the import will be messed up too.\
-TLDR: --target is the must.\
+Command<br />
+swagger generate client -f ./swagger.yaml --target=sdk/ -A api <br />
+the --target seems to be crucial because without it, it will generate code directly to this microservice folder and it would be messy and noone wants that.<br />
+Without the --target, all the import will be messed up too.<br />
+TLDR: --target is the must.<br />
 It also has some bugs that related to not being able to find the spec file (my swagger.yaml file) so it's better for my head to just do it where the swagger.yaml file is.
 
 DEBUGGING is important. Learn how to do that.
